@@ -15,6 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = false;
   bool isError = false;
 
+  /// sdasdsa
   Future<void> getProductsData() async {
     try {
       isLoading = true;
