@@ -13,7 +13,7 @@ class _HomeNavScreenState extends State<HomeNavScreen> {
   int currentIndex = 0;
   List<Widget> screens = [
     const HomeScreen(),
-    const MoreScreen(),
+    const ProfileScreen(),
   ];
 
   @override
@@ -29,7 +29,7 @@ class _HomeNavScreenState extends State<HomeNavScreen> {
         },
         items: const [
           BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home)),
-          BottomNavigationBarItem(label: 'more', icon: Icon(Icons.menu)),
+          BottomNavigationBarItem(label: 'Profile', icon: Icon(Icons.person)),
         ],
       ),
     );

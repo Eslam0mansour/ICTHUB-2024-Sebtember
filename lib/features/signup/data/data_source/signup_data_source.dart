@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:icthub_2024_9/features/more/data/data_model/user_model.dart';
 
 class SignupDataSource {
   static String errorMessage = '';
@@ -7,6 +9,8 @@ class SignupDataSource {
   static Future<bool> signup({
     required String email,
     required String password,
+    required String name,
+    required int phone,
   }) async {
     try {
       isLoading = true;
@@ -17,6 +21,13 @@ class SignupDataSource {
       );
       if (credential.user != null) {
         isLoading = false;
+        setUserData(
+          name: name,
+          phone: phone,
+          email: email,
+          password: password,
+          uid: credential.user!.uid,
+        );
         return true;
       } else {
         throw Exception('User not found');
@@ -32,5 +43,35 @@ class SignupDataSource {
       print(e);
       return false;
     }
+  }
+
+  static Future<void> setUserData({
+    required String name,
+    required int phone,
+    required String email,
+    required String password,
+    required String uid,
+  }) async {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    //! note => this is create default id for user
+    // users.add({
+    //         'name': name, // John Doe
+    //         'phone': phone, // Stokes and Sons
+    //         'email': email ,// 42
+    //         'password': password // 42
+    //       });
+    UserModel userModel = UserModel(
+        name: name, phone: phone, email: email, password: password, uid: uid);
+    users.doc(uid).set(userModel.toMap());
+  }
+
+  static Future<UserModel> getUserData()async{
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    DocumentSnapshot<Map<String, dynamic>> doc =await FirebaseFirestore.instance.collection('users').doc(uid).get();
+  return UserModel.fromMap(doc.data()??{
+    'name':'null',
+    'phone': 'null',
+    'email':'null',
+  });
   }
 }
