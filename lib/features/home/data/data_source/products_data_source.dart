@@ -1,18 +1,27 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'package:icthub_2024_9/features/home/data/data_models/product_data_model.dart';
 
 class ProductsDataSource {
-  static bool isLoading = false;
-  static bool isError = false;
-  static List<ProductDataModel> listOfProducts = [];
+  /// get products from firebase [FirebaseFirestore]
+  Future<List<ProductDataModel>> getProductsFormFirebase() async {
+    List<ProductDataModel> productList = [];
 
-  static Future<bool> getProductsData() async {
+    QuerySnapshot<Map<String, dynamic>> getProducts =
+        await FirebaseFirestore.instance.collection('products').get();
+    for (var element in getProducts.docs) {
+      ProductDataModel model = ProductDataModel.fromMap(element.data());
+      productList.add(model);
+    }
+    return productList;
+  }
+
+  /// get products from fakestoreapi.com
+  Future<List<ProductDataModel>> getProductsFakeStoreApi() async {
     try {
-      isLoading = true;
-      isError = false;
-      listOfProducts.clear();
+      List<ProductDataModel> listOfProducts = [];
       final uri = Uri.parse('https://fakestoreapi.com/products');
 
       final response = await http.get(uri);
@@ -29,17 +38,12 @@ class ProductsDataSource {
           );
           listOfProducts.add(product);
         }
-        isLoading = false;
-        print(listOfProducts.length);
+        return listOfProducts;
       } else {
         throw Exception('${response.statusCode}');
       }
     } catch (e) {
-      isError = true;
-      isLoading = false;
-      print(e);
-      print('Failed to fetch data');
+      throw Exception(e.toString());
     }
-    return false;
   }
 }

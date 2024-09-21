@@ -33,11 +33,14 @@ class _SignupScreenState extends State<SignupScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset('assets/svg/signuplogo.svg',
-                height:200,
-                fit: BoxFit.cover,
+                SvgPicture.asset(
+                  'assets/svg/signuplogo.svg',
+                  height: 200,
+                  fit: BoxFit.cover,
                 ),
-                SizedBox(height: 50,),
+                const SizedBox(
+                  height: 50,
+                ),
                 TextFormField(
                   controller: nameController,
                   decoration: const InputDecoration(
@@ -108,11 +111,11 @@ class _SignupScreenState extends State<SignupScreen> {
                       if (formKey.currentState!.validate()) {
                         setState(() {});
                         SignupDataSource.signup(
-                          email: emailController.text,
-                          password: passwordController.text,
-                          name: nameController.text,
-                          phone: int.parse(phoneController.text)
-                        ).then((v) {
+                                email: emailController.text,
+                                password: passwordController.text,
+                                name: nameController.text,
+                                phone: int.parse(phoneController.text))
+                            .then((v) {
                           if (v) {
                             Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(

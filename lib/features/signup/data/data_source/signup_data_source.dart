@@ -61,17 +61,12 @@ class SignupDataSource {
     //         'password': password // 42
     //       });
     UserModel userModel = UserModel(
-        name: name, phone: phone, email: email, password: password, uid: uid);
+      name: name,
+      phone: phone,
+      email: email,
+      password: password,
+      uid: uid,
+    );
     users.doc(uid).set(userModel.toMap());
-  }
-
-  static Future<UserModel> getUserData()async{
-    final uid = FirebaseAuth.instance.currentUser?.uid;
-    DocumentSnapshot<Map<String, dynamic>> doc =await FirebaseFirestore.instance.collection('users').doc(uid).get();
-  return UserModel.fromMap(doc.data()??{
-    'name':'null',
-    'phone': 'null',
-    'email':'null',
-  });
   }
 }

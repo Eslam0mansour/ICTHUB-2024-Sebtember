@@ -1,13 +1,10 @@
-import 'dart:convert';
-
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 class UserModel {
   String name;
   int phone;
   String email;
   String password;
   String uid;
-  
+
   UserModel({
     required this.name,
     required this.phone,
@@ -35,5 +32,4 @@ class UserModel {
       uid: map['uid'] as String,
     );
   }
-
-  }
+}
